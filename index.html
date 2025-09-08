@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Retro Vibe (Whitesmoke & Bright Red) -->
-    <!-- Application Structure Plan: The application is structured into four thematic sections navigated by a sticky header: Overview, Cash Flow Rights, Control Rights, and Key Takeaways. This structure logically groups complex topics, moving from general concepts to specific financial and governance mechanisms. The key interactions are two simulators: one for Liquidation Preference and one for Anti-Dilution. This design was chosen to transform passive reading into active learning. By allowing users to manipulate variables and see immediate visual feedback, complex financial concepts become more intuitive and memorable than static text descriptions, directly addressing the goal of user understanding and exploration. -->
+    <!-- Application Structure Plan: The application is structured into four thematic sections navigated by a sticky header: Overview, Cash Flow Rights, Control Rights, and Key Takeaways. This structure logically groups complex topics, moving from general concepts to specific financial and governance mechanisms. the key interactions are two simulators: one for Liquidation Preference and one for Anti-Dilution. This design was chosen to transform passive reading into active learning. By allowing users to manipulate variables and see immediate visual feedback, complex financial concepts become more intuitive and memorable than static text descriptions, directly addressing the goal of user understanding and exploration. -->
     <!-- Visualization & Content Choices: 
         1. Liquidation Preference: Report Info -> Participating vs. Non-participating examples. Goal -> Compare payout structures. Viz/Presentation Method -> Stacked bar charts and text outputs. Interaction -> Sliders for sale price, investment, and ownership. Justification -> Visually breaks down the components of the payout to make the "waterfall" calculation tangible and easier to compare. Library -> Chart.js.
         2. Anti-Dilution Provisions: Report Info -> Full Ratchet vs. Weighted Average concepts. Goal -> Demonstrate ownership changes in a down round. Viz/Presentation Method -> Pie chart and summary table. Interaction -> Buttons to select protection type and a slider for investment amount. Justification -> Visually illustrates the severe impact of dilution mechanics and allows for variable inputs to explore different scenarios. Library -> Chart.js.
@@ -117,7 +117,7 @@
         <section id="cash-flow" class="py-16 border-t border-slate-200">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900">Cash Flow Rights: How Investors Get Paid</h2>
-                <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-600">Cash flow rights determine the distribution of proceeds in an exit event, like a sale or merger. The type of stock an investor holds is crucial, with Convertible Preferred Stock being the standard in VC deals due to its protective features.</p>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-600">Cash flow rights determine the distribution of proceeds in an exit event, like a sale or merger. The type of stock an investor holds is crucial, with <span style="color: #E7473C; font-weight: 500;">Convertible Preferred Stock</span> being the standard in VC deals due to its protective features.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 mb-16">
@@ -126,18 +126,18 @@
                     <p class="mt-2 text-gray-600">The most basic form of ownership, typically held by founders and employees. It has the lowest priority in a liquidation event.</p>
                 </div>
                  <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="font-semibold text-lg text-gray-800">"Straight" Preferred Stock</h3>
-                    <p class="mt-2 text-gray-600">Offers a fixed dividend and has priority (preference) over common stock in getting paid back during a sale.</p>
+                    <h3 class="font-semibold text-lg text-gray-800">Convertible Bonds & Notes</h3>
+                    <p class="mt-2 text-gray-600">These are debt instruments that provide investors with the right to convert to a fixed number of shares. This allows companies to raise capital without an official valuation, delaying dilution and costly legal fees. However, as debt, they come with an interest rate and a maturity date, which can pressure the company's cash flow if not converted in time.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="font-semibold text-lg text-gray-800">Convertible Preferred Stock</h3>
-                    <p class="mt-2 text-gray-600">A hybrid security. It provides the downside protection of preferred stock with the upside potential of common stock, as it can be converted. This can be **participating** (investors get both their liquidation preference and a share of the remaining proceeds) or **non-participating** (investors choose whichever is greater: their liquidation preference or their pro rata share of the company).</p>
+                    <p class="mt-2 text-gray-600">A hybrid security. It provides the downside protection of preferred stock with the upside potential of common stock, as it can be converted. This can be <span style="color: #E7473C; font-weight: 500;">participating</span> (investors get both their liquidation preference and a share of the remaining proceeds) or <span style="color: #E7473C; font-weight: 500;">non-participating</span> (investors choose whichever is greater: their liquidation preference or their pro rata share of the company).</p>
                 </div>
             </div>
 
             <div class="bg-white rounded-lg shadow-xl p-8">
                 <h3 class="text-2xl font-bold text-center text-gray-900">Interactive Simulator: Liquidation Preference</h3>
-                <p class="mt-2 text-center text-gray-600 max-w-2xl mx-auto">A **liquidation preference** is an investor's safety net. It ensures they get their money back (often a multiple of it) before common shareholders see a dime. Use the sliders below to see how payouts change between a Non-Participating and a Participating scenario.</p>
+                <p class="mt-2 text-center text-gray-600 max-w-2xl mx-auto">A <span style="color: #E7473C; font-weight: 500;">liquidation preference</span> is an investor's safety net. It ensures they get their money back (often a multiple of it) before common shareholders see a dime. Use the sliders below to see how payouts change between a Non-Participating and a Participating scenario.</p>
                 
                 <div class="grid md:grid-cols-3 gap-6 my-8">
                     <div>
@@ -186,7 +186,7 @@
                 <div class="bg-white rounded-lg shadow-xl p-8 relative">
                      <h3 class="text-2xl font-bold text-center text-gray-900">Interactive Simulator: Anti-Dilution Protection</h3>
                     <div id="infoButton" class="info-button">&#9432;</div>
-                    <p class="mt-2 text-center text-gray-600 max-w-2xl mx-auto">Imagine a startup with a $4M pre-money valuation (1M founder shares, 1M VC1 shares at $2/share). Now, a **Series B** round is a down round with a lower price. See how different anti-dilution clauses protect VC1's stake against this dilution.</p>
+                    <p class="mt-2 text-center text-gray-600 max-w-2xl mx-auto">Imagine a startup with a $4M pre-money valuation (1M founder shares, 1M VC1 shares at $2/share). Now, a <span style="color: #E7473C; font-weight: 500;">Series B</span> round is a down round with a lower price. See how different anti-dilution clauses protect VC1's stake against this dilution.</p>
                     
                     <div class="grid md:grid-cols-2 gap-6 my-8">
                         <div>
@@ -237,27 +237,27 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="font-semibold text-lg">Anti-dilution Provisions</h3>
-                        <p class="mt-2 text-gray-600">These protect VCs from losing ownership percentage if a future funding round is priced lower than their original investment. The two main types are "**full ratchet**" and "**weighted average**." A full ratchet provides the strongest protection to the original investor by resetting their conversion price to the new, lower price. This is a powerful incentive for the VC but can be a major disincentive for the founders and new investors, as it can cause significant dilution. The weighted average method is a more common compromise that adjusts the conversion price to a lesser degree, balancing the incentives of both original investors and new funders to ensure a deal can be completed.</p>
+                        <p class="mt-2 text-gray-600">These protect VCs from losing ownership percentage if a future funding round is priced lower than their original investment. The two main types are "<span style="color: #E7473C; font-weight: 500;">full ratchet</span>" and "<span style="color: #E7473C; font-weight: 500;">weighted average</span>." A full ratchet provides the strongest protection to the original investor by resetting their conversion price to the new, lower price. This is a powerful incentive for the VC but can be a major disincentive for the founders and new investors, as it can cause significant dilution. The weighted average method is a more common compromise that adjusts the conversion price to a lesser degree, balancing the incentives of both original investors and new funders to ensure a deal can be completed.</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="font-semibold text-lg">Co-sale (Tag-along) Rights</h3>
                         <p class="mt-2 text-gray-600">Allows investors to participate in any share sale initiated by founders.
-                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Protects the VC's ability to exit. If a founder sells, the VC can "tag along" to ensure they also get a chance to realize returns and aren't left behind.</p>
+                        <br><span style="color: #E7473C; font-weight: 500;">Incentive:</span> A <span style="color: #E7473C; font-weight: 500;">co-sale agreement</span> ensures that if a founder sells shares, the VC has the right to sell a proportional number of their own shares in the same transaction. This protects the VC's ability to exit alongside a founder, preventing them from being left in a company with a potentially less-motivated owner. It aligns the interests of the founder and the VC regarding exit timing.</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="font-semibold text-lg">Drag-along Rights</h3>
                         <p class="mt-2 text-gray-600">Forces minority shareholders to agree to a sale if the majority of investors approve it.
-                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Prevents a few small shareholders from blocking a profitable acquisition. This provides a clear path to an exit for the majority and makes the startup a more predictable and attractive acquisition target.</p>
+                        <br><span style="color: #E7473C; font-weight: 500;">Incentive:</span> A <span style="color: #E7473C; font-weight: 500;">drag-along right</span> is a powerful tool to ensure a smooth exit. If the majority shareholders (often the VCs) find a buyer for the company, they can "drag" the minority shareholders along, forcing them to sell their shares as part of the deal. This is a crucial incentive for VCs, as it prevents a few small, potentially difficult shareholders from blocking a profitable acquisition, which could otherwise put the entire exit at risk.</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="font-semibold text-lg">Vesting</h3>
                         <p class="mt-2 text-gray-600">Restricts when founders and employees can access the full ownership of their shares, typically over a period like 4 years.
-                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Ensures key personnel are committed for the long-term. If they leave early, they forfeit unvested equity, protecting the company and the investor's capital from being tied to a departed founder.</p>
+                        <br><span style="color: #E7473C; font-weight: 500;">Incentive:</span> Vesting is designed to ensure the long-term commitment of key personnel. A typical vesting schedule might be a "4-year cliff with a 1-year cliff," meaning an employee receives 25% of their shares after the first year and the rest monthly over the next three years. This incentivizes founders to stay with the company to build value, as their ownership is not fully secured until they have completed the full vesting period. If they leave early, their unvested equity is forfeited, protecting the company's value from being tied to a departed individual.</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="font-semibold text-lg">Registration Rights</h3>
                         <p class="mt-2 text-gray-600">Gives investors the right to demand that the company register its shares for a public offering (IPO).
-                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Guarantees a clear exit path for the VC. It provides a mechanism to turn their illiquid private stock into publicly-tradable stock, which is essential to their business model of returning capital to their own investors (LPs).</p>
+                        <br><span style="color: #E7473C; font-weight: 500;">Incentive:</span> A <span style="color: #E7473C; font-weight: 500;">registration right</span> provides a clear path to liquidity for a VC's investment. Since VC investments are illiquid (private), this right gives them the option to force the company to file the necessary paperwork to make their shares publicly tradable. This is essential for VCs to be able to sell their shares in the public market and return capital to their own investors (LPs), completing their investment cycle.</p>
                     </div>
                 </div>
             </div>
@@ -272,22 +272,22 @@
                 <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
                     <span class="text-4xl text-[#E7473C] mb-2"> &#128200; </span>
                     <h3 class="font-bold">Valuation is More Than a Number</h3>
-                    <p class="mt-2 text-sm text-gray-600">The "Post-Money Valuation" (PMV) in headlines often ignores these complex terms. The true value of different share classes can vary dramatically based on the specific contract rights.</p>
+                    <p class="mt-2 text-sm text-gray-600">The "<span style="color: #E7473C; font-weight: 500;">Post-Money Valuation</span>" (PMV) in headlines often ignores these complex terms. The true value of different share classes can vary dramatically based on the specific contract rights.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
                     <span class="text-4xl text-[#E7473C] mb-2"> &#128187; </span>
                     <h3 class="font-bold">Contracts Dictate Returns</h3>
-                    <p class="mt-2 text-sm text-gray-600">Special terms like liquidation preference and anti-dilution can mean that in certain exit scenarios, investors get most or all of the proceeds, leaving little for founders and employees. This is why the terms matter as much as the headline valuation.</p>
+                    <p class="mt-2 text-sm text-gray-600">Special terms like <span style="color: #E7473C; font-weight: 500;">liquidation preference</span> and <span style="color: #E7473C; font-weight: 500;">anti-dilution</span> can mean that in certain exit scenarios, investors get most or all of the proceeds, leaving little for founders and employees. This is why the terms matter as much as the headline valuation.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
                     <span class="text-4xl text-[#E7473C] mb-2"> &#128101; </span>
                     <h3 class="font-bold">Incentives Drive Behavior</h3>
-                    <p class="mt-2 text-sm text-gray-600">Every clause in a term sheet is designed to create an incentive. For example, a catch-up provision can incentivize a VC to take on more risk. Understanding these incentives is key to predicting how founders and investors will act.</p>
+                    <p class="mt-2 text-sm text-gray-600">Every clause in a term sheet is designed to create an <span style="color: #E7473C; font-weight: 500;">incentive</span>. For example, a catch-up provision can incentivize a VC to take on more risk. Understanding these incentives is key to predicting how founders and investors will act.</p>
                 </div>
                  <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
                     <span class="text-4xl text-[#E7473C] mb-2"> &#128176; </span>
                     <h3 class="font-bold">Future Financing Matters</h3>
-                    <p class="mt-2 text-sm text-gray-600">You cannot accurately value a stake in a startup without considering the impact of future financing rounds. These rounds will shift the capital structure and dilute ownership, impacting the ultimate payout for all shareholders.</p>
+                    <p class="mt-2 text-sm text-gray-600">You cannot accurately value a stake in a startup without considering the impact of <span style="color: #E7473C; font-weight: 500;">future financing rounds</span>. These rounds will shift the capital structure and dilute ownership, impacting the ultimate payout for all shareholders.</p>
                 </div>
             </div>
         </section>
@@ -298,23 +298,34 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2 class="text-xl font-bold mb-4">How the Calculations Work</h2>
-            <div class="space-y-4">
-                <p><strong>Initial State:</strong></p>
-                <ul class="list-disc list-inside">
-                    <li>Founders have 1,000,000 shares.</li>
-                    <li>VC1 has 1,000,000 shares, at an initial price of $2.00/share. Total VC1 investment is $2,000,000.</li>
-                    <li>Total pre-money shares = 2,000,000.</li>
-                    <li>Pre-money valuation = 2,000,000 shares * $2.00/share = $4,000,000.</li>
+            <div class="space-y-4 text-sm">
+                <p>This simulator models how different anti-dilution clauses affect a company's capitalization table in a down round.</p>
+                <p><strong>Initial State (Series A):</strong></p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li><strong>Founders:</strong> 1,000,000 shares.</li>
+                    <li><strong>VC 1:</strong> 1,000,000 shares, purchased at <span style="color: #E7473C; font-weight: 500;">$2.00/share</span> for a total investment of <span style="color: #E7473C; font-weight: 500;">$2,000,000</span>.</li>
+                    <li><strong>Total Pre-money Shares:</strong> 2,000,000.</li>
                 </ul>
-                <p><strong>Series B Calculation:</strong></p>
-                <p>The simulator calculates how the final share distribution changes based on VC2's investment, their target ownership, and the anti-dilution protection. Note that VC2's investment is used to acquire their shares, and the VC2 ownership percentage is the **final, post-dilution** target.
-                <p><strong>Shares for VC2:</strong> This is the key. VC2 wants their final ownership to be the target percentage. Their shares are calculated based on the total number of shares that will be in the company *after* all anti-dilution adjustments.</p>
-                <p><strong>New Price/Share:</strong> This is the price VC2 pays for their shares. It's calculated by dividing their investment by the shares they receive. In a down round, this price is lower than the initial $2.00.</p>
-                <p><strong>Anti-Dilution Scenarios:</strong></p>
-                <ul class="list-disc list-inside">
-                    <li><strong>No Protection:</strong> VC1 receives no additional shares. The number of shares for VC2 is calculated based on their target ownership and the total shares of the company (Founders + VC1 + VC2). This means founders and VC1 absorb all dilution.</li>
-                    <li><strong>Full Ratchet:</strong> The original investor's (VC1) conversion price is reset to the new, lower price per share. VC1 gets a number of additional shares to make up for the difference. These new shares are then added to the total share count, severely diluting the founders.</li>
-                    <li><strong>Weighted Average:</strong> A more moderate approach. The new conversion price for VC1 is a weighted average of the original price and the new price. This results in VC1 getting fewer extra shares than a full ratchet, and less dilution for the founders.</li>
+                <p><strong>Series B Calculation Breakdown:</strong></p>
+                <p>The calculation is driven by two user-selected inputs: the <span style="color: #E7473C; font-weight: 500;">Series B Investment</span> and the <span style="color: #E7473C; font-weight: 500;">Target Ownership for VC 2</span>. The simulator works backward from these to determine the new share price and the final capitalization table for each scenario.</p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li><strong>Total Shares (Post-Money):</strong> Determined by the pre-money shares divided by the ownership percentage of existing shareholders.
+                    <br><span class="italic text-gray-500">Total Shares = (Founders Shares + VC 1 Shares) / (1 - VC 2 Target Ownership)</span></li>
+                    <li><strong>New Shares for VC 2:</strong> Calculated by multiplying the total post-money shares by VC 2's target ownership percentage.
+                    <br><span class="italic text-gray-500">Shares for VC 2 = Total Shares (Post-Money) * VC 2 Target Ownership</span></li>
+                    <li><strong>New Price Per Share:</strong> The price VC 2 pays for their shares. Since this is a down round, this price is less than the initial $2.00/share.
+                    <br><span class="italic text-gray-500">New Price = Series B Investment / Shares for VC 2</span></li>
+                </ul>
+                <p><strong>Anti-Dilution Scenarios Step-by-Step:</strong></p>
+                <p>Here's how VC 1's share count is adjusted for each anti-dilution clause after the new price per share is determined:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li><strong>No Protection:</strong> No adjustment is made. The founders and VC 1 absorb dilution.
+                    <br><span class="italic text-gray-500">VC 1 New Shares = Original Shares (1,000,000)</span></li>
+                    <li><strong>Full Ratchet:</strong> The most aggressive form. VC 1's conversion price is reset to the new, lower price. They receive enough extra shares to make their total shares equivalent to what their original investment would have bought at the new price.
+                    <br><span class="italic text-gray-500">VC 1 New Shares = VC 1 Original Investment / New Price Per Share</span></li>
+                    <li><strong>Weighted Average:</strong> A fairer approach that accounts for the size of the new financing round. The new conversion price for VC 1 is a weighted average of the original and new prices.
+                    <br><span class="italic text-gray-500">VC 1 New Conversion Price = Original Price * (Original Shares + Shares in New Round) / (Original Shares + Shares in New Round at Original Price)</span>
+                    <br><span class="italic text-gray-500">VC 1 New Shares = VC 1 Original Investment / New Conversion Price</span></li>
                 </ul>
             </div>
         </div>
@@ -474,7 +485,7 @@
                 nonParticipatingChart.data.datasets[1].data = [preferencePayout];
                 nonParticipatingChart.data.datasets[2].data = [nonPartFounderPayout];
                 nonParticipatingChart.update();
-                nonParticipatingSummary.innerHTML = `VC has a choice of <strong>$${asConvertedPayout.toFixed(2)}M</strong> (as common stock) vs. <strong>$${preferencePayout.toFixed(2)}M</strong> (preference).<br>VC will choose to <strong>${vcChoice}</strong>. Final Payout: VC gets <strong>$${nonPartVCPayout.toFixed(2)}M</strong>. Founders get <strong>$${nonPartFounderPayout.toFixed(2)}M</strong>.`;
+                nonParticipatingSummary.innerHTML = `VC has a choice of <span style="color: #FF6F61; font-weight: 500;">$${asConvertedPayout.toFixed(2)}M</span> (as common stock) vs. <span style="color: #E7473C; font-weight: 500;">$${preferencePayout.toFixed(2)}M</span> (preference).<br>VC will choose to <span style="color: #E7473C; font-weight: 500;">${vcChoice}</span>. Final Payout: VC gets <span style="color: #E7473C; font-weight: 500;">$${nonPartVCPayout.toFixed(2)}M</span>. Founders get <span style="color: #47A8BD; font-weight: 500;">$${nonPartFounderPayout.toFixed(2)}M</span>.`;
 
                 const partPreferencePayout = Math.min(investment, salePrice);
                 const remainingProceeds = Math.max(0, salePrice - partPreferencePayout);
@@ -486,7 +497,7 @@
                 participatingChart.data.datasets[1].data = [partParticipationPayout];
                 participatingChart.data.datasets[2].data = [partFounderPayout];
                 participatingChart.update();
-                participatingSummary.innerHTML = `VC's payout is a "double-dip", combining their preference and a share of the remaining proceeds.<br>Final Payout: VC gets <strong>$${partVCPayoutTotal.toFixed(2)}M</strong>. Founders get <strong>$${partFounderPayout.toFixed(2)}M</strong>.`;
+                participatingSummary.innerHTML = `VC's payout is a "double-dip", combining their preference and a share of the remaining proceeds.<br>Final Payout: VC gets <span style="color: #E7473C; font-weight: 500;">$${partVCPayoutTotal.toFixed(2)}M</span>. Founders get <span style="color: #47A8BD; font-weight: 500;">$${partFounderPayout.toFixed(2)}M</span>.`;
             }
 
             [salePriceSlider, investmentSlider, ownershipSlider].forEach(slider => {
@@ -575,9 +586,9 @@
                     sharesVC1 += extraShares;
                     totalShares = sharesFounder + sharesVC1 + sharesVC2;
                 } else if (protectionType === 'weighted_average') {
-                    const weightedAvgPrice = initialPrice * (initialShares.founder + initialShares.vc1 + (seriesBInvestment / initialPrice)) / (initialShares.founder + initialShares.vc1 + sharesVC2);
-                    const extraShares = (initialShares.vc1 * initialPrice / weightedAvgPrice) - initialShares.vc1;
-                    sharesVC1 += extraShares;
+                    const weightedAvgPrice = (initialPrice * preMoneyShares + newPricePerShare * sharesVC2) / (preMoneyShares + sharesVC2);
+                    const newVC1Shares = initialShares.vc1 * (initialPrice / weightedAvgPrice);
+                    sharesVC1 = newVC1Shares;
                     totalShares = sharesFounder + sharesVC1 + sharesVC2;
                 } else {
                     totalShares = sharesFounder + sharesVC1 + sharesVC2;
