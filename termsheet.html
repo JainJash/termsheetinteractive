@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive VC Term Sheet Explainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Retro Vibe (Whitesmoke & Bright Red) -->
+    <!-- Application Structure Plan: The application is structured into four thematic sections navigated by a sticky header: Overview, Cash Flow Rights, Control Rights, and Key Takeaways. This structure logically groups complex topics, moving from general concepts to specific financial and governance mechanisms. The key interactions are two simulators: one for Liquidation Preference and one for Anti-Dilution. This design was chosen to transform passive reading into active learning. By allowing users to manipulate variables and see immediate visual feedback, complex financial concepts become more intuitive and memorable than static text descriptions, directly addressing the goal of user understanding and exploration. -->
+    <!-- Visualization & Content Choices: 
+        1. Liquidation Preference: Report Info -> Participating vs. Non-participating examples. Goal -> Compare payout structures. Viz/Presentation Method -> Stacked bar charts and text outputs. Interaction -> Sliders for sale price, investment, and ownership. Justification -> Visually breaks down the components of the payout to make the "waterfall" calculation tangible and easier to compare. Library -> Chart.js.
+        2. Anti-Dilution Provisions: Report Info -> Full Ratchet vs. Weighted Average concepts. Goal -> Demonstrate ownership changes in a down round. Viz/Presentation Method -> Pie chart and summary table. Interaction -> Buttons to select protection type and a slider for investment amount. Justification -> Visually illustrates the severe impact of dilution mechanics and allows for variable inputs to explore different scenarios. Library -> Chart.js.
+        3. Other Rights (Cards): Report Info -> Text descriptions of co-sale, drag-along, etc. Goal -> Inform and organize. Viz/Presentation Method -> Styled HTML/CSS cards. Interaction -> None. Justification -> Clean, digestible format for text-heavy information. Method -> HTML/Tailwind CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #F0F0F0;
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding-top: 50px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: slide-in 0.3s ease-out;
+        }
+        @keyframes slide-in {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .info-button {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: #E7473C;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="ml-2 text-xl font-bold text-gray-800">VC Term Sheet Explainer</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#overview" class="font-medium text-gray-600 hover:text-[#E7473C] transition-colors">Overview</a>
+                    <a href="#cash-flow" class="font-medium text-gray-600 hover:text-[#E7473C] transition-colors">Cash Flow Rights</a>
+                    <a href="#control" class="font-medium text-gray-600 hover:text-[#E7473C] transition-colors">Control Rights</a>
+                    <a href="#takeaways" class="font-medium text-gray-600 hover:text-[#E7473C] transition-colors">Takeaways</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <section id="overview" class="py-16">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Understanding Venture Capital Term Sheets</h1>
+                <p class="mt-6 text-lg text-gray-600">This interactive guide breaks down the essential components of a VC term sheet. Venture Capitalists (VCs) face significant risks after investing in a startup. The term sheet is a contract designed to protect their investment, define their rights, and align incentives between them and the founders. We'll explore the key financial (cash flow) and governance (control) rights that shape the relationship.</p>
+            </div>
+        </section>
+
+        <section id="cash-flow" class="py-16 border-t border-slate-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">Cash Flow Rights: How Investors Get Paid</h2>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-600">Cash flow rights determine the distribution of proceeds in an exit event, like a sale or merger. The type of stock an investor holds is crucial, with Convertible Preferred Stock being the standard in VC deals due to its protective features.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg text-gray-800">Common Stock</h3>
+                    <p class="mt-2 text-gray-600">The most basic form of ownership, typically held by founders and employees. It has the lowest priority in a liquidation event.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg text-gray-800">"Straight" Preferred Stock</h3>
+                    <p class="mt-2 text-gray-600">Offers a fixed dividend and has priority (preference) over common stock in getting paid back during a sale.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg text-gray-800">Convertible Preferred Stock</h3>
+                    <p class="mt-2 text-gray-600">A hybrid security. It provides the downside protection of preferred stock with the upside potential of common stock, as it can be converted. This can be **participating** (investors get both their liquidation preference and a share of the remaining proceeds) or **non-participating** (investors choose whichever is greater: their liquidation preference or their pro rata share of the company).</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-center text-gray-900">Interactive Simulator: Liquidation Preference</h3>
+                <p class="mt-2 text-center text-gray-600 max-w-2xl mx-auto">A **liquidation preference** is an investor's safety net. It ensures they get their money back (often a multiple of it) before common shareholders see a dime. Use the sliders below to see how payouts change between a Non-Participating and a Participating scenario.</p>
+                
+                <div class="grid md:grid-cols-3 gap-6 my-8">
+                    <div>
+                        <label for="salePrice" class="block font-medium text-sm text-gray-700">Company Sale Price ($M)</label>
+                        <input type="range" id="salePrice" min="1" max="50" value="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-center font-semibold text-[#E7473C] mt-1" id="salePriceValue">$10M</div>
+                    </div>
+                    <div>
+                        <label for="investment" class="block font-medium text-sm text-gray-700">VC Investment ($M)</label>
+                        <input type="range" id="investment" min="1" max="10" value="2" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-center font-semibold text-[#E7473C] mt-1" id="investmentValue">$2M</div>
+                    </div>
+                    <div>
+                        <label for="ownership" class="block font-medium text-sm text-gray-700">VC Ownership (%)</label>
+                        <input type="range" id="ownership" min="5" max="50" value="20" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-center font-semibold text-[#E7473C] mt-1" id="ownershipValue">20%</div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-semibold text-center mb-4">Non-Participating Payout</h4>
+                        <div class="chart-container">
+                            <canvas id="nonParticipatingChart"></canvas>
+                        </div>
+                        <div id="nonParticipatingSummary" class="mt-4 text-center text-gray-700"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold text-center mb-4">Participating Payout</h4>
+                        <div class="chart-container">
+                            <canvas id="participatingChart"></canvas>
+                        </div>
+                        <div id="participatingSummary" class="mt-4 text-center text-gray-700"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="control" class="py-16 border-t border-slate-200">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">Control Rights: How Investors Influence the Company</h2>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-600">Control rights give VCs influence over key company decisions to protect their investment. These rights are often strongest in the early days and may diminish as the company meets performance milestones.</p>
+            </div>
+            
+            <div class="space-y-8">
+                <div class="bg-white rounded-lg shadow-xl p-8 relative">
+                     <h3 class="text-2xl font-bold text-center text-gray-900">Interactive Simulator: Anti-Dilution Protection</h3>
+                    <div id="infoButton" class="info-button">&#9432;</div>
+                    <p class="mt-2 text-center text-gray-600 max-w-2xl mx-auto">Imagine a startup with a $4M pre-money valuation (1M founder shares, 1M VC1 shares at $2/share). Now, a **Series B** round is a down round with a lower price. See how different anti-dilution clauses protect VC1's stake against this dilution.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 my-8">
+                        <div>
+                            <label for="seriesBInvestment" class="block font-medium text-sm text-gray-700">Series B Investment ($M)</label>
+                            <input type="range" id="seriesBInvestment" min="0.5" max="5" value="1" step="0.5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="text-center font-semibold text-[#E7473C] mt-1" id="seriesBInvestmentValue">$1M</div>
+                        </div>
+                        <div>
+                            <label for="seriesBOwnership" class="block font-medium text-sm text-gray-700">Target Ownership for VC2 (%)</label>
+                            <input type="range" id="seriesBOwnership" min="10" max="70" value="25" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="text-center font-semibold text-[#E7473C] mt-1" id="seriesBOwnershipValue">25%</div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 mt-8 items-center">
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="antiDilutionChart"></canvas>
+                        </div>
+                        <div>
+                             <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg text-center mb-3">Ownership Results</h4>
+                                <div id="antiDilutionSummary" class="space-y-2"></div>
+                            </div>
+                            <div class="mt-4 flex flex-wrap justify-center gap-3">
+                                <button id="btnNoProtection" class="px-4 py-2 text-sm font-semibold bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">No Protection</button>
+                                <button id="btnWeightedAverage" class="px-4 py-2 text-sm font-semibold bg-[#ffca80] text-[#E7473C] rounded-md hover:bg-[#ffc673] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Weighted Average</button>
+                                <button id="btnFullRatchet" class="px-4 py-2 text-sm font-semibold bg-[#E7473C] text-white rounded-md hover:bg-[#d83f34] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Full Ratchet</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="capTableContainer" class="mt-8 bg-gray-50 p-6 rounded-lg hidden">
+                        <h4 class="text-xl font-bold text-center mb-4">Capitalization Table</h4>
+                        <table class="w-full text-sm text-gray-600">
+                            <thead>
+                                <tr class="text-left font-medium text-gray-800 border-b border-gray-200">
+                                    <th class="py-2">Shareholder</th>
+                                    <th class="py-2">Shares</th>
+                                    <th class="py-2">% Ownership</th>
+                                </tr>
+                            </thead>
+                            <tbody id="capTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-lg">Anti-dilution Provisions</h3>
+                        <p class="mt-2 text-gray-600">These protect VCs from losing ownership percentage if a future funding round is priced lower than their original investment. The two main types are "**full ratchet**" and "**weighted average**." A full ratchet provides the strongest protection to the original investor by resetting their conversion price to the new, lower price. This is a powerful incentive for the VC but can be a major disincentive for the founders and new investors, as it can cause significant dilution. The weighted average method is a more common compromise that adjusts the conversion price to a lesser degree, balancing the incentives of both original investors and new funders to ensure a deal can be completed.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-lg">Co-sale (Tag-along) Rights</h3>
+                        <p class="mt-2 text-gray-600">Allows investors to participate in any share sale initiated by founders.
+                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Protects the VC's ability to exit. If a founder sells, the VC can "tag along" to ensure they also get a chance to realize returns and aren't left behind.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-lg">Drag-along Rights</h3>
+                        <p class="mt-2 text-gray-600">Forces minority shareholders to agree to a sale if the majority of investors approve it.
+                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Prevents a few small shareholders from blocking a profitable acquisition. This provides a clear path to an exit for the majority and makes the startup a more predictable and attractive acquisition target.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-lg">Vesting</h3>
+                        <p class="mt-2 text-gray-600">Restricts when founders and employees can access the full ownership of their shares, typically over a period like 4 years.
+                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Ensures key personnel are committed for the long-term. If they leave early, they forfeit unvested equity, protecting the company and the investor's capital from being tied to a departed founder.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-lg">Registration Rights</h3>
+                        <p class="mt-2 text-gray-600">Gives investors the right to demand that the company register its shares for a public offering (IPO).
+                        <br><span class="text-[#E7473C] font-medium">Incentive:</span> Guarantees a clear exit path for the VC. It provides a mechanism to turn their illiquid private stock into publicly-tradable stock, which is essential to their business model of returning capital to their own investors (LPs).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="takeaways" class="py-16 border-t border-slate-200">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">Key Takeaways & The Impact of Staging</h2>
+                 <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-600">Understanding these terms is crucial because they fundamentally alter a startup's valuation and the distribution of returns. Each new financing round (staging) adds complexity and dilutes existing shareholders.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-gray-700 max-w-7xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                    <span class="text-4xl text-[#E7473C] mb-2"> &#128200; </span>
+                    <h3 class="font-bold">Valuation is More Than a Number</h3>
+                    <p class="mt-2 text-sm text-gray-600">The "Post-Money Valuation" (PMV) in headlines often ignores these complex terms. The true value of different share classes can vary dramatically based on the specific contract rights.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                    <span class="text-4xl text-[#E7473C] mb-2"> &#128187; </span>
+                    <h3 class="font-bold">Contracts Dictate Returns</h3>
+                    <p class="mt-2 text-sm text-gray-600">Special terms like liquidation preference and anti-dilution can mean that in certain exit scenarios, investors get most or all of the proceeds, leaving little for founders and employees. This is why the terms matter as much as the headline valuation.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                    <span class="text-4xl text-[#E7473C] mb-2"> &#128101; </span>
+                    <h3 class="font-bold">Incentives Drive Behavior</h3>
+                    <p class="mt-2 text-sm text-gray-600">Every clause in a term sheet is designed to create an incentive. For example, a catch-up provision can incentivize a VC to take on more risk. Understanding these incentives is key to predicting how founders and investors will act.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                    <span class="text-4xl text-[#E7473C] mb-2"> &#128176; </span>
+                    <h3 class="font-bold">Future Financing Matters</h3>
+                    <p class="mt-2 text-sm text-gray-600">You cannot accurately value a stake in a startup without considering the impact of future financing rounds. These rounds will shift the capital structure and dilute ownership, impacting the ultimate payout for all shareholders.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 class="text-xl font-bold mb-4">How the Calculations Work</h2>
+            <div class="space-y-4">
+                <p><strong>Initial State:</strong></p>
+                <ul class="list-disc list-inside">
+                    <li>Founders have 1,000,000 shares.</li>
+                    <li>VC1 has 1,000,000 shares, at an initial price of $2.00/share. Total VC1 investment is $2,000,000.</li>
+                    <li>Total pre-money shares = 2,000,000.</li>
+                    <li>Pre-money valuation = 2,000,000 shares * $2.00/share = $4,000,000.</li>
+                </ul>
+                <p><strong>Series B Calculation:</strong></p>
+                <p>The simulator calculates how the final share distribution changes based on VC2's investment, their target ownership, and the anti-dilution protection. Note that VC2's investment is used to acquire their shares, and the VC2 ownership percentage is the **final, post-dilution** target.
+                <p><strong>Shares for VC2:</strong> This is the key. VC2 wants their final ownership to be the target percentage. Their shares are calculated based on the total number of shares that will be in the company *after* all anti-dilution adjustments.</p>
+                <p><strong>New Price/Share:</strong> This is the price VC2 pays for their shares. It's calculated by dividing their investment by the shares they receive. In a down round, this price is lower than the initial $2.00.</p>
+                <p><strong>Anti-Dilution Scenarios:</strong></p>
+                <ul class="list-disc list-inside">
+                    <li><strong>No Protection:</strong> VC1 receives no additional shares. The number of shares for VC2 is calculated based on their target ownership and the total shares of the company (Founders + VC1 + VC2). This means founders and VC1 absorb all dilution.</li>
+                    <li><strong>Full Ratchet:</strong> The original investor's (VC1) conversion price is reset to the new, lower price per share. VC1 gets a number of additional shares to make up for the difference. These new shares are then added to the total share count, severely diluting the founders.</li>
+                    <li><strong>Weighted Average:</strong> A more moderate approach. The new conversion price for VC1 is a weighted average of the original price and the new price. This results in VC1 getting fewer extra shares than a full ratchet, and less dilution for the founders.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500">
+            <p>Interactive Explainer based on the "Term Sheets & Contracting" lecture.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const salePriceSlider = document.getElementById('salePrice');
+            const investmentSlider = document.getElementById('investment');
+            const ownershipSlider = document.getElementById('ownership');
+            const salePriceValue = document.getElementById('salePriceValue');
+            const investmentValue = document.getElementById('investmentValue');
+            const ownershipValue = document.getElementById('ownershipValue');
+            const nonParticipatingSummary = document.getElementById('nonParticipatingSummary');
+            const participatingSummary = document.getElementById('participatingSummary');
+
+            const commonChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        stacked: true,
+                        title: { display: true, text: 'Millions ($)' }
+                    },
+                    y: {
+                        stacked: true
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.raw !== null) {
+                                    label += `$${context.raw.toFixed(2)}M`;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            };
+
+            const nonParticipatingChart = new Chart(document.getElementById('nonParticipatingChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Payout'],
+                    datasets: [{
+                        label: 'VC Payout (As-Converted)',
+                        data: [0],
+                        backgroundColor: '#FF6F61',
+                        borderColor: '#FF6F61'
+                    },{
+                        label: 'VC Payout (Preference)',
+                        data: [0],
+                        backgroundColor: '#E7473C',
+                        borderColor: '#E7473C'
+                    }, {
+                        label: 'Founder Payout',
+                        data: [0],
+                        backgroundColor: '#FFB8B3',
+                        borderColor: '#FFB8B3'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            stacked: false,
+                            title: { display: true, text: 'Millions ($)' }
+                        },
+                        y: {
+                            stacked: false
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (context.raw !== null) {
+                                        label += `: $${context.raw.toFixed(2)}M`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const participatingChart = new Chart(document.getElementById('participatingChart'), {
+                type: 'bar',
+                data: {
+                    labels: [''],
+                    datasets: [{
+                        label: 'VC Preference',
+                        data: [0],
+                        backgroundColor: '#E7473C',
+                    }, {
+                        label: 'VC Participation',
+                        data: [0],
+                        backgroundColor: '#FF6F61',
+                    }, {
+                        label: 'Founder Payout',
+                        data: [0],
+                        backgroundColor: '#FFB8B3',
+                    }]
+                },
+                options: commonChartOptions
+            });
+
+            function updateLiquidationCharts() {
+                const salePrice = parseFloat(salePriceSlider.value);
+                const investment = parseFloat(investmentSlider.value);
+                const ownership = parseFloat(ownershipSlider.value) / 100;
+
+                salePriceValue.textContent = `$${salePrice}M`;
+                investmentValue.textContent = `$${investment}M`;
+                ownershipValue.textContent = `${ownership * 100}%`;
+
+                const asConvertedPayout = salePrice * ownership;
+                const preferencePayout = Math.min(investment, salePrice);
+                
+                let nonPartVCPayout;
+                let nonPartFounderPayout;
+                let vcChoice;
+
+                if (asConvertedPayout > preferencePayout) {
+                    nonPartVCPayout = asConvertedPayout;
+                    nonPartFounderPayout = Math.max(0, salePrice - nonPartVCPayout);
+                    vcChoice = 'Convert to Common Stock';
+                } else {
+                    nonPartVCPayout = preferencePayout;
+                    nonPartFounderPayout = Math.max(0, salePrice - nonPartVCPayout);
+                    vcChoice = 'Take Liquidation Preference';
+                }
+
+                nonParticipatingChart.data.datasets[0].data = [asConvertedPayout];
+                nonParticipatingChart.data.datasets[1].data = [preferencePayout];
+                nonParticipatingChart.data.datasets[2].data = [nonPartFounderPayout];
+                nonParticipatingChart.update();
+                nonParticipatingSummary.innerHTML = `VC has a choice of <strong>$${asConvertedPayout.toFixed(2)}M</strong> (as common stock) vs. <strong>$${preferencePayout.toFixed(2)}M</strong> (preference).<br>VC will choose to <strong>${vcChoice}</strong>. Final Payout: VC gets <strong>$${nonPartVCPayout.toFixed(2)}M</strong>. Founders get <strong>$${nonPartFounderPayout.toFixed(2)}M</strong>.`;
+
+                const partPreferencePayout = Math.min(investment, salePrice);
+                const remainingProceeds = Math.max(0, salePrice - partPreferencePayout);
+                const partParticipationPayout = remainingProceeds * ownership;
+                const partVCPayoutTotal = partPreferencePayout + partParticipationPayout;
+                const partFounderPayout = remainingProceeds * (1 - ownership);
+
+                participatingChart.data.datasets[0].data = [partPreferencePayout];
+                participatingChart.data.datasets[1].data = [partParticipationPayout];
+                participatingChart.data.datasets[2].data = [partFounderPayout];
+                participatingChart.update();
+                participatingSummary.innerHTML = `VC's payout is a "double-dip", combining their preference and a share of the remaining proceeds.<br>Final Payout: VC gets <strong>$${partVCPayoutTotal.toFixed(2)}M</strong>. Founders get <strong>$${partFounderPayout.toFixed(2)}M</strong>.`;
+            }
+
+            [salePriceSlider, investmentSlider, ownershipSlider].forEach(slider => {
+                slider.addEventListener('input', updateLiquidationCharts);
+            });
+            
+            updateLiquidationCharts();
+
+            const antiDilutionChartCanvas = document.getElementById('antiDilutionChart');
+            const antiDilutionSummary = document.getElementById('antiDilutionSummary');
+            const seriesBInvestmentSlider = document.getElementById('seriesBInvestment');
+            const seriesBInvestmentValue = document.getElementById('seriesBInvestmentValue');
+            const seriesBOwnershipSlider = document.getElementById('seriesBOwnership');
+            const seriesBOwnershipValue = document.getElementById('seriesBOwnershipValue');
+            
+            const btnNoProtection = document.getElementById('btnNoProtection');
+            const btnWeightedAverage = document.getElementById('btnWeightedAverage');
+            const btnFullRatchet = document.getElementById('btnFullRatchet');
+            const capTableContainer = document.getElementById('capTableContainer');
+            const capTableBody = document.getElementById('capTableBody');
+
+            const antiDilutionConfig = {
+                type: 'pie',
+                data: {
+                    labels: ['Founders', 'VC 1 (Series A)'],
+                    datasets: [{
+                        data: [50, 50],
+                        backgroundColor: ['#47A8BD', '#E7473C'],
+                        borderColor: '#F0F0F0',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += `${context.parsed.toFixed(1)}%`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            const antiDilutionChart = new Chart(antiDilutionChartCanvas, antiDilutionConfig);
+
+            const initialShares = { founder: 1000000, vc1: 1000000 };
+            const initialPrice = 2.00;
+            
+            function updateAntiDilution(protectionType) {
+                const seriesBInvestment = parseFloat(seriesBInvestmentSlider.value) * 1000000;
+                const seriesBOwnership = parseFloat(seriesBOwnershipSlider.value) / 100;
+
+                const preMoneyShares = initialShares.founder + initialShares.vc1;
+                const postMoneySharesTotal = preMoneyShares / (1 - seriesBOwnership);
+                const sharesVC2 = postMoneySharesTotal * seriesBOwnership;
+                
+                const newPricePerShare = seriesBInvestment / sharesVC2;
+
+                let sharesFounder = initialShares.founder;
+                let sharesVC1 = initialShares.vc1;
+                
+                if (newPricePerShare >= initialPrice) {
+                    btnWeightedAverage.disabled = true;
+                    btnFullRatchet.disabled = true;
+                    protectionType = 'none';
+                } else {
+                    btnWeightedAverage.disabled = false;
+                    btnFullRatchet.disabled = false;
+                }
+                
+                let totalShares;
+
+                if (protectionType === 'full_ratchet') {
+                    const extraShares = (initialShares.vc1 * initialPrice / newPricePerShare) - initialShares.vc1;
+                    sharesVC1 += extraShares;
+                    totalShares = sharesFounder + sharesVC1 + sharesVC2;
+                } else if (protectionType === 'weighted_average') {
+                    const weightedAvgPrice = initialPrice * (initialShares.founder + initialShares.vc1 + (seriesBInvestment / initialPrice)) / (initialShares.founder + initialShares.vc1 + sharesVC2);
+                    const extraShares = (initialShares.vc1 * initialPrice / weightedAvgPrice) - initialShares.vc1;
+                    sharesVC1 += extraShares;
+                    totalShares = sharesFounder + sharesVC1 + sharesVC2;
+                } else {
+                    totalShares = sharesFounder + sharesVC1 + sharesVC2;
+                }
+
+                const pctFounder = (sharesFounder / totalShares) * 100;
+                const pctVC1 = (sharesVC1 / totalShares) * 100;
+                const pctVC2 = (sharesVC2 / totalShares) * 100;
+
+                antiDilutionChart.data.labels = ['Founders', 'VC 1 (Series A)', 'VC 2 (Series B)'];
+                antiDilutionChart.data.datasets[0].data = [pctFounder, pctVC1, pctVC2];
+                antiDilutionChart.data.datasets[0].backgroundColor = ['#47A8BD', '#E7473C', '#222222'];
+                antiDilutionChart.update();
+
+                antiDilutionSummary.innerHTML = `
+                    <div class="flex justify-between text-sm"><span>Series B Price/Share:</span> <span class="font-semibold">$${newPricePerShare.toFixed(2)}</span></div>
+                `;
+
+                capTableContainer.classList.remove('hidden');
+                capTableBody.innerHTML = `
+                    <tr><td class="py-2">Founders</td><td class="py-2">${sharesFounder.toLocaleString()}</td><td class="py-2">${pctFounder.toFixed(1)}%</td></tr>
+                    <tr><td class="py-2">VC 1 (Series A)</td><td class="py-2">${sharesVC1.toLocaleString()}</td><td class="py-2">${pctVC1.toFixed(1)}%</td></tr>
+                    <tr><td class="py-2">VC 2 (Series B)</td><td class="py-2">${sharesVC2.toLocaleString()}</td><td class="py-2">${pctVC2.toFixed(1)}%</td></tr>
+                    <tr class="font-bold border-t border-gray-200"><td class="py-2">Total</td><td class="py-2">${totalShares.toLocaleString()}</td><td class="py-2">100.0%</td></tr>
+                `;
+            }
+
+            seriesBInvestmentSlider.addEventListener('input', () => {
+                seriesBInvestmentValue.textContent = `$${seriesBInvestmentSlider.value}M`;
+                updateAntiDilution(currentAntiDilutionType);
+            });
+            seriesBOwnershipSlider.addEventListener('input', () => {
+                seriesBOwnershipValue.textContent = `${seriesBOwnershipSlider.value}%`;
+                updateAntiDilution(currentAntiDilutionType);
+            });
+            
+            let currentAntiDilutionType = 'none';
+
+            document.getElementById('btnNoProtection').addEventListener('click', () => {
+                currentAntiDilutionType = 'none';
+                updateAntiDilution(currentAntiDilutionType);
+            });
+            document.getElementById('btnWeightedAverage').addEventListener('click', () => {
+                currentAntiDilutionType = 'weighted_average';
+                updateAntiDilution(currentAntiDilutionType);
+            });
+            document.getElementById('btnFullRatchet').addEventListener('click', () => {
+                currentAntiDilutionType = 'full_ratchet';
+                updateAntiDilution(currentAntiDilutionType);
+            });
+            
+            document.getElementById('infoButton').addEventListener('click', () => {
+                document.getElementById('infoModal').style.display = 'block';
+            });
+
+            document.querySelector('.close-button').addEventListener('click', () => {
+                document.getElementById('infoModal').style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === document.getElementById('infoModal')) {
+                    document.getElementById('infoModal').style.display = 'none';
+                }
+            });
+
+            updateAntiDilution(currentAntiDilutionType);
+        });
+    </script>
+</body>
+</html>
